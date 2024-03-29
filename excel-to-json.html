@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JSON Converter</title>
+    <style>
+      .year-row {
+        text-align: left;
+      }
+      .table-wrap {
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 10px;
+        display: inline-block;
+      }
+      table {
+        border-spacing: 10px; /* Add space between columns */
+      }
+    </style>
+  </head>
+  <body>
+    <h1>JSON Converter</h1>
+    <div class="">
+      <p>
+        Copy and paste the data from the Excel file into the text area below.
+        The data should be in the following format:
+      </p>
+      <div class="table-wrap">
+        <table>
+          <tr class="year-row">
+            <th colspan="13">2024</th>
+          </tr>
+          <tr>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+            <th>6</th>
+            <th>7</th>
+            <th>8</th>
+            <th>9</th>
+            <th>10</th>
+            <th>11</th>
+            <th>12</th>
+            <th>Total</th>
+          </tr>
+          <tr>
+            <td>0.92%</td>
+            <td>0.92%</td>
+            <td>0.92%</td>
+            <td>0.92%</td>
+            <td>0.92%</td>
+            <td>0.92%</td>
+            <td>0.92%</td>
+            <td>0.92%</td>
+            <td>0.92%</td>
+            <td>0.92%</td>
+            <td>0.92%</td>
+            <td>0.92%</td>
+            <td>10.99%</td>
+          </tr>
+
+          <tr class="year-row">
+            <th colspan="13">2025</th>
+          </tr>
+          <tr>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+            <th>6</th>
+            <th>7</th>
+            <th>8</th>
+            <th>9</th>
+            <th>10</th>
+            <th>11</th>
+            <th>12</th>
+            <th>Total</th>
+          </tr>
+          <tr>
+            <td>0.81%</td>
+            <td>0.81%</td>
+            <td>0.81%</td>
+            <td>0.81%</td>
+            <td>0.81%</td>
+            <td>0.81%</td>
+            <td>0.81%</td>
+            <td>0.81%</td>
+            <td>0.81%</td>
+            <td>0.81%</td>
+            <td>0.81%</td>
+            <td>0.81%</td>
+            <td>9.69%</td>
+          </tr>
+
+          <tr class="year-row">
+            <th colspan="13">2026</th>
+          </tr>
+          <tr>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+            <th>6</th>
+            <th>7</th>
+            <th>8</th>
+            <th>9</th>
+            <th>10</th>
+            <th>11</th>
+            <th>12</th>
+            <th>Total</th>
+          </tr>
+          <tr>
+            <td>1.46%</td>
+            <td>1.46%</td>
+            <td>1.46%</td>
+            <td>1.46%</td>
+            <td>1.46%</td>
+            <td>1.46%</td>
+            <td>1.46%</td>
+            <td>1.46%</td>
+            <td>1.46%</td>
+            <td>1.46%</td>
+            <td>1.46%</td>
+            <td>1.46%</td>
+            <td>17.51%</td>
+          </tr>
+
+          <tr class="year-row">
+            <th colspan="13">2027</th>
+          </tr>
+          <tr>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+            <th>6</th>
+            <th>7</th>
+            <th>8</th>
+            <th>9</th>
+            <th>10</th>
+            <th>11</th>
+            <th>12</th>
+            <th>Total</th>
+          </tr>
+          <tr>
+            <td>1.92%</td>
+            <td>1.92%</td>
+            <td>1.92%</td>
+            <td>1.92%</td>
+            <td>1.92%</td>
+            <td>1.92%</td>
+            <td>1.92%</td>
+            <td>1.92%</td>
+            <td>1.92%</td>
+            <td>1.92%</td>
+            <td>1.92%</td>
+            <td>1.92%</td>
+            <td>23.01%</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="">
+      <textarea id="input" rows="10" cols="50"></textarea>
+    </div>
+    <div class="">
+      <button onclick="convertToJson()">Convert to JSON</button>
+    </div>
+    <div class="">
+      <textarea id="output" rows="10" cols="50"></textarea>
+    </div>
+
+    <script>
+      function convertToJson() {
+        let input = document.getElementById('input').value
+        let output = document.getElementById('output')
+        try {
+          let lines = input.split('\n')
+          let json = {}
+          for (let i = 0; i < lines.length; i += 3) {
+            let year = lines[i].trim()
+            let items = lines[i + 2]
+              .split('\t')
+              .map((item) => 1 + parseFloat(item.trim().replace('%', '')) / 100) // Add 1 to the parsed percentage
+            let obj = {}
+            for (let j = 0; j < items.length - 1; j++) {
+              obj[j + 1] = items[j] // Use just numbers as keys
+            }
+            obj['total'] = items[items.length - 1]
+            json[year] = obj // Separate data by year
+          }
+          output.value = JSON.stringify(json, null, 2)
+        } catch (e) {
+          output.value = 'Invalid data'
+        }
+      }
+    </script>
+  </body>
+</html>
